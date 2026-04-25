@@ -4,6 +4,8 @@
 ## [HW2] 氣溫預報 Web App
 這是一個整合氣象局 API、SQLite 資料庫與 Streamlit 視覺化介面的網頁應用程式。
 
+**[🚀 線上展示連結 (Live Demo)](https://aiot-hw2-6swcqrqdqvwrfxibqedcsw.streamlit.app/)**
+
 ### 功能特點
 - **數據自動化**：自動從 CWA API 獲取一週地區天氣預報。
 - **資料持久化**：將氣溫數據存入 SQLite 資料庫，支持離線查詢。

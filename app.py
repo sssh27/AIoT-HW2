@@ -4,7 +4,7 @@ import pandas as pd
 import altair as alt
 
 import os
-from fetch_and_store import fetch_weather_data, process_and_store_data
+from fetch_and_store import fetch_weather_data, process_and_store_data, CWA_TOKEN
 
 # 設定網頁標題
 st.set_page_config(page_title="氣溫預報 Web App", layout="wide")

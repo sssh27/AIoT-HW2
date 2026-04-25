@@ -3,8 +3,18 @@ import sqlite3
 import pandas as pd
 import altair as alt
 
+import os
+from fetch_and_store import fetch_weather_data, process_and_store_data
+
 # 設定網頁標題
 st.set_page_config(page_title="氣溫預報 Web App", layout="wide")
+
+# 自動初始化資料庫 (如果不存在)
+if not os.path.exists("data.db"):
+    st.info("正在初始化資料庫，請稍候...")
+    data = fetch_weather_data()
+    process_and_store_data(data)
+    st.success("資料庫初始化成功！")
 
 st.title("Temperature Forecast Web App")
 

@@ -38,16 +38,36 @@ initialize_db()
 
 st.title("Temperature Forecast Web App")
 
+# 側邊欄設定：選擇模式 (滿足「真實地與模擬的」要求)
+st.sidebar.title("設定")
+app_mode = st.sidebar.radio("選擇資料來源模式", ["真實模式 (Real)", "模擬模式 (Simulated)"])
+
 def get_connection():
     return sqlite3.connect("data.db")
 
+def load_simulated_data():
+    """產生模擬用的隨機數據"""
+    import numpy as np
+    from datetime import datetime, timedelta
+    dates = [(datetime.now() + timedelta(days=i)).strftime('%Y-%m-%d') for i in range(7)]
+    df = pd.DataFrame({
+        'dataDate': dates,
+        'minT': np.random.randint(15, 22, size=7),
+        'maxT': np.random.randint(25, 33, size=7)
+    })
+    return df
+
 def load_regions():
+    if app_mode == "模擬模式 (Simulated)":
+        return ["模擬地區 A", "模擬地區 B"]
     conn = get_connection()
     df = pd.read_sql_query("SELECT DISTINCT regionName FROM TemperatureForecasts", conn)
     conn.close()
     return df['regionName'].tolist()
 
 def load_data(region_name):
+    if app_mode == "模擬模式 (Simulated)":
+        return load_simulated_data()
     conn = get_connection()
     query = f"SELECT dataDate, minT, maxT FROM TemperatureForecasts WHERE regionName = '{region_name}' ORDER BY dataDate"
     df = pd.read_sql_query(query, conn)

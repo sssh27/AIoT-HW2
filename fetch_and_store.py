@@ -22,7 +22,11 @@ def fetch_weather_data():
     url = f"https://opendata.cwa.gov.tw/fileapi/v1/opendataapi/F-A0010-001?Authorization={CWA_TOKEN}&downloadType=WEB&format=JSON"
     
     try:
-        response = requests.get(url)
+        # 氣象局憑證有時會造成 SSL 錯誤，設定 verify=False 強制通過
+        import urllib3
+        urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+        
+        response = requests.get(url, verify=False)
         response.raise_for_status()
         data = response.json()
         return data

@@ -7,6 +7,14 @@ from dotenv import load_dotenv
 load_dotenv()
 CWA_TOKEN = os.getenv("CWA_TOKEN")
 
+# 如果在 Streamlit 環境下且沒找到環境變數，嘗試讀取 st.secrets
+if not CWA_TOKEN:
+    try:
+        import streamlit as st
+        CWA_TOKEN = st.secrets["CWA_TOKEN"]
+    except:
+        pass
+
 def fetch_weather_data():
     """HW2-1: 獲取天氣預報資料 (使用檔案資源 API)"""
     print("正在從 CWA 檔案資源 API 獲取資料 (F-A0010-001)...")

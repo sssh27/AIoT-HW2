@@ -9,12 +9,24 @@ from fetch_and_store import fetch_weather_data, process_and_store_data
 # 設定網頁標題
 st.set_page_config(page_title="氣溫預報 Web App", layout="wide")
 
-# 自動初始化資料庫 (如果不存在)
-if not os.path.exists("data.db"):
-    st.info("正在初始化資料庫，請稍候...")
-    data = fetch_weather_data()
-    process_and_store_data(data)
-    st.success("資料庫初始化成功！")
+# 自動初始化資料庫 (如果不存在或表單遺失)
+def initialize_db():
+    try:
+        conn = sqlite3.connect("data.db")
+        cursor = conn.cursor()
+        cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='TemperatureForecasts'")
+        table_exists = cursor.fetchone()
+        conn.close()
+        
+        if not table_exists:
+            st.info("正在初始化資料庫表格，請稍候...")
+            data = fetch_weather_data()
+            process_and_store_data(data)
+            st.success("資料庫初始化成功！")
+    except Exception as e:
+        st.error(f"資料庫初始化失敗: {e}")
+
+initialize_db()
 
 st.title("Temperature Forecast Web App")
 

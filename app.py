@@ -11,6 +11,10 @@ st.set_page_config(page_title="氣溫預報 Web App", layout="wide")
 
 # 自動初始化資料庫 (如果不存在或表單遺失)
 def initialize_db():
+    if not CWA_TOKEN:
+        st.error("❌ 找不到 CWA_TOKEN！請在 Streamlit Cloud 的 Secrets 中設定。")
+        return
+
     try:
         conn = sqlite3.connect("data.db")
         cursor = conn.cursor()
@@ -19,12 +23,16 @@ def initialize_db():
         conn.close()
         
         if not table_exists:
-            st.info("正在初始化資料庫表格，請稍候...")
+            st.warning("⚠️ 資料庫表格遺失，嘗試初始化...")
             data = fetch_weather_data()
-            process_and_store_data(data)
-            st.success("資料庫初始化成功！")
+            if data:
+                process_and_store_data(data)
+                st.success("✅ 資料庫初始化成功！")
+                st.rerun() # 重新整理頁面以讀取新資料
+            else:
+                st.error("❌ 無法從 API 獲取資料，請檢查 Token 是否正確。")
     except Exception as e:
-        st.error(f"資料庫初始化失敗: {e}")
+        st.error(f"❌ 資料庫初始化過程發生錯誤: {e}")
 
 initialize_db()
 

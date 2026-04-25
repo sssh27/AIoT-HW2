@@ -12,8 +12,11 @@ st.set_page_config(page_title="氣溫預報 Web App", layout="wide")
 # 自動初始化資料庫 (如果不存在或表單遺失)
 def initialize_db():
     if not CWA_TOKEN:
-        st.error("❌ 找不到 CWA_TOKEN！請在 Streamlit Cloud 的 Secrets 中設定。")
+        st.error("❌ 找不到 CWA_TOKEN！請確認 Streamlit Secrets 設定正確。")
         return
+    
+    # 偵錯用：顯示 Token 前幾碼 (部署完後可刪除)
+    st.write(f"系統讀取到的 Token: `{CWA_TOKEN[:8]}...`")
 
     try:
         conn = sqlite3.connect("data.db")

@@ -28,6 +28,14 @@ def fetch_weather_data():
         return data
     except Exception as e:
         print(f"獲取資料失敗: {e}")
+        try:
+            import streamlit as st
+            st.error(f"API 請求失敗詳細資訊: {e}")
+            if hasattr(e, 'response') and e.response is not None:
+                st.write(f"狀態碼: {e.response.status_code}")
+                st.write(f"錯誤內容: {e.response.text}")
+        except:
+            pass
         return None
 
 def process_and_store_data(data):

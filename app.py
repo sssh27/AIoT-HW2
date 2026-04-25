@@ -15,9 +15,6 @@ def initialize_db():
         st.error("❌ 找不到 CWA_TOKEN！請確認 Streamlit Secrets 設定正確。")
         return
     
-    # 偵錯用：顯示 Token 前幾碼 (部署完後可刪除)
-    st.write(f"系統讀取到的 Token: `{CWA_TOKEN[:8]}...`")
-
     try:
         conn = sqlite3.connect("data.db")
         cursor = conn.cursor()

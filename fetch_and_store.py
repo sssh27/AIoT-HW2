@@ -34,10 +34,7 @@ def fetch_weather_data():
         print(f"獲取資料失敗: {e}")
         try:
             import streamlit as st
-            st.error(f"API 請求失敗詳細資訊: {e}")
-            if hasattr(e, 'response') and e.response is not None:
-                st.write(f"狀態碼: {e.response.status_code}")
-                st.write(f"錯誤內容: {e.response.text}")
+            st.error(f"無法獲取資料：{e}")
         except:
             pass
         return None
